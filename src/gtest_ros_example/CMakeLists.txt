@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 2.8.3)
 set(PROJECT_NAME gtest_ros_example)
 project(${PROJECT_NAME})
-
+#option(build_gtest_samples "Build gtest's sample programs." OFF)
+#message("BUILD_TESTS=${BUILD_TESTS}")
+SET(BUILD_TESTS False CACHE BOOL "Some user-specified option")
 # kinetic specific
 add_compile_options(-std=c++11)
 
@@ -34,8 +36,11 @@ target_link_libraries(rostalker
 ## Testing ##
 #############
 
+file(GLOB RESULT ${CMAKE_CURRENT_SOURCE_DIR}/../test/)
+list(LENGTH RESULT RES_LEN)
+if(BUILD_TESTS)
 # Build and link the test_talker
-if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/../test)
+#if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/../test)
 	catkin_add_gtest(talker-test ../test/test_talker.cpp)
 	target_link_libraries(talker-test ${catkin_LIBRARIES})
 
