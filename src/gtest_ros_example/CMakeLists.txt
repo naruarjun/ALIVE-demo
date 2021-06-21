@@ -39,19 +39,24 @@ target_link_libraries(rostalker
 file(GLOB RESULT ${CMAKE_CURRENT_SOURCE_DIR}/../test/)
 list(LENGTH RESULT RES_LEN)
 if(BUILD_TESTS)
+	message("BUILDING THE TESTS")
+	file(GLOB gtests_SRC RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/../test/${PROJECT_NAME}/" "${CMAKE_CURRENT_SOURCE_DIR}/../test/${PROJECT_NAME}/*.cpp" )
+	foreach (testsourcefile ${gtests_SRC})
+		message(${testsourcefile})
 # Build and link the test_talker
 #if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/../test)
-	catkin_add_gtest(talker-test ../test/test_talker.cpp)
-	target_link_libraries(talker-test ${catkin_LIBRARIES})
-
+		string( REPLACE ".cpp" "" testname ${testsourcefile} )	
+		catkin_add_gtest(${testname} ../test/${PROJECT_NAME}/${testsourcefile})
+		target_link_libraries(${testname} ${catkin_LIBRARIES})
+	endforeach()
 #####################################
 ## Testing w/ and w/o catkin magic ##
 #####################################
 
 # Build and link the simple_test executable w/ catkin magic
-	catkin_add_gtest(simple_test_catkin ../test/simple_test.cpp)
-	target_link_libraries(simple_test_catkin ${catkin_LIBRARIES})
+	#catkin_add_gtest(simple_test_catkin ../test/${PROJECT_NAME}/simple_test.cpp)
+	#target_link_libraries(simple_test_catkin ${catkin_LIBRARIES})
 endif()
 # Build and link the simple_test executable w/o any catkin magic
-add_executable(simple_test src/simple_test.cpp)
-target_link_libraries(simple_test ${GTEST_LIBRARIES} pthread)
+add_executable(simple_test2 src/simple_test.cpp)
+target_link_libraries(simple_test2 ${GTEST_LIBRARIES} pthread)
